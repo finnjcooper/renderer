@@ -1,22 +1,10 @@
-# C++ Rasteriser and Raytracer using SDL
-
-```RedNoise``` contains the original implementation for coursework submission.\
-```2.0``` contains a revised and re-structured version to assist in being a teaching assistant on the unit.
+# C++ Rasteriser and Raytracer using SDL or WebGPU
 
 ## Building
 
-Both versions can be compiled and run with ```make``` or ```cmake```. Each Makefile contains a 'speedy' rule for optimal performance:
-```
-cd 2.0/
-make speedy
-```
-```
-cd RedNoise/
-make speedy
-```
+Can be compiled and run with ```cmake -S . -B build -GNinja && cmake --build build -j```.
 
-
-## 2.0 Controls
+## Controls
 
 ``WASD`` to move the camera forward-backward / left-right.\
 ``EQ`` to move the camera up-down.\
