@@ -1,10 +1,10 @@
-# C++ Rasteriser and Raytracer using SDL or WebGPU
+# C++ Rasteriser and Raytracer using WebGPU
 
 ## Building
 
-Can be compiled and run with ```make```. Makefile contains a 'speedy' rule for optimal performance:
+Can be compiled and run with ```just```.
 ```
-make speedy
+just build
 ```
 
 

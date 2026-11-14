@@ -1,34 +1,13 @@
-# Invoking the CMake build from the command line is a two step process, first, *generate* a build by running the following:
-#
-#   cmake -Bbuild -H. -DCMAKE_BUILD_TYPE=Release
-# 
-# Where `Release` can be replaced with `Debug`, which contains gdb and address sanitiser definitions already written for you.
-# Once a build is created, proceed with *compilation*:
-# 
-#   cmake --build build --target RedNoise --config Release # optionally, for parallel build, append -j $(nproc)
-#
-# This creates the executable in the build directory. You only need to *generate* a build if you modify the CMakeList.txt file.
-# For any other changes to the source code, simply recompile.
-
-
 cmake_minimum_required(VERSION 3.12)
-project(RedNoise)
+project(main)
 
 set(CMAKE_CXX_STANDARD 14)
 
-# Note, we do this for glm because it's a header only library and because we shipped it with the project
-# normally you would use find_package(<package_name>) for libraries with actual objects
-set(GLM_INCLUDE_DIRS libs/glm-0.9.7.2)
-
-find_package(SDL2 REQUIRED)
-
-
-
-include_directories(${SDL2_INCLUDE_DIRS} ${GLM_INCLUDE_DIRS})
+include_directories(libs/glm-0.9.7.2)
 include_directories(libs/sdw)
 include_directories(libs/extra)
 
-add_executable(RedNoise
+add_executable(main
         libs/sdw/CanvasPoint.cpp
         libs/sdw/CanvasTriangle.cpp
         libs/sdw/CanvasLine.cpp
@@ -50,10 +29,10 @@ add_executable(RedNoise
         libs/extra/Obj.cpp
         libs/extra/Model.cpp
         libs/extra/CubeMap.cpp
-        src/RedNoise.cpp
+        src/main.cpp
 )
 
-target_compile_options(RedNoise
+target_compile_options(main
     PUBLIC
     -Wall
     -Wextra
@@ -67,16 +46,8 @@ target_compile_options(RedNoise
 set(DEBUG_OPTIONS -Og -fno-omit-frame-pointer -g)
 set(RELEASE_OPTIONS -O3 -march=native -mtune=native)
 set(SPEEDY_OPTIONS -Ofast -funsafe-math-optimizations -march=native -mtune=native)
-target_link_libraries(RedNoise PUBLIC $<$<CONFIG:Debug>:-Wl,-lasan>)
+target_link_libraries(main PUBLIC $<$<CONFIG:Debug>:-Wl,-lasan>)
 
-find_package(OpenMP)
-if(OpenMP_CXX_FOUND)
-    target_link_libraries(RedNoise PUBLIC OpenMP::OpenMP_CXX)
-endif()
-
-target_compile_options(RedNoise PUBLIC "$<$<CONFIG:RelWithDebInfo>:${RELEASE_OPTIONS}>")
-target_compile_options(RedNoise PUBLIC "$<$<CONFIG:Release>:${RELEASE_OPTIONS}>")
-target_compile_options(RedNoise PUBLIC "$<$<CONFIG:Debug>:${DEBUG_OPTIONS}>")
-target_compile_options(RedNoise PUBLIC "$<$<CONFIG:Speedy>:${SPEEDY_OPTIONS}>")
- 
-target_link_libraries(RedNoise PRIVATE ${SDL2_LIBRARIES})
+target_compile_options(main PUBLIC "$<$<CONFIG:Release>:${RELEASE_OPTIONS}>")
+target_compile_options(main PUBLIC "$<$<CONFIG:Debug>:${DEBUG_OPTIONS}>")
+target_compile_options(main PUBLIC "$<$<CONFIG:Speedy>:${SPEEDY_OPTIONS}>")
