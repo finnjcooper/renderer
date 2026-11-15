@@ -1,6 +1,7 @@
 #pragma once
 #include <glm/glm.hpp>
 #include <vector>
+#include <cstdlib>
 
 #define AREA_LIGHT_SAMPLES 4
 
@@ -23,11 +24,11 @@ struct Light {
             sample();
         }
     Light(const glm::vec3 &position, const float &intensity, const glm::vec3 &uVec, const glm::vec3 &vVec, const int uSteps = AREA_LIGHT_SAMPLES, const int vSteps = AREA_LIGHT_SAMPLES)
-        : position(position), colour({1, 1, 1}), intensity(intensity), uVec(uVec), vVec(vVec), uSteps(uSteps), vSteps(vSteps), type(AREA) {
+        : position(position), colour({1, 1, 1}), intensity(intensity), type(AREA), uVec(uVec), vVec(vVec), uSteps(uSteps), vSteps(vSteps) {
             sample();
         }
     Light(const glm::vec3 &position, const glm::vec3 &colour, const float &intensity, const glm::vec3 &uVec, const glm::vec3 &vVec, const int uSteps = AREA_LIGHT_SAMPLES, const int vSteps = AREA_LIGHT_SAMPLES)
-        : position(position), colour(colour), intensity(intensity), uVec(uVec), vVec(vVec), uSteps(uSteps), vSteps(vSteps), type(AREA) {
+        : position(position), colour(colour), intensity(intensity), type(AREA), uVec(uVec), vVec(vVec), uSteps(uSteps), vSteps(vSteps) {
             sample();
         }
 

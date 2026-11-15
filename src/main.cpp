@@ -1,5 +1,7 @@
 #include <DrawingWindow.h>
 #include "Renderer.h"
+#include "WebGPURenderer.h"
+#include <emscripten/emscripten.h>
 #include <vector>
 
 #define WIDTH 1280
@@ -10,7 +12,8 @@ struct Application {
     Camera camera;
     std::vector<Light> lights;
     Scene scene;
-    Renderer renderer;
+    Renderer softwareRenderer;
+    WebGPURenderer webgpuRenderer;
 
     Application()
         : window(WIDTH, HEIGHT, false),
@@ -19,14 +22,17 @@ struct Application {
               Light(CEIL0, 15.0f, CEIL1 - CEIL0, CEIL2 - CEIL0)
           },
           scene(makeObjects(), lights),
-          renderer(window)
-    {
-    }
+          softwareRenderer(window),
+          webgpuRenderer(WIDTH, HEIGHT) {}
 
     void update() {
-        renderer.draw(scene, camera);
-        camera.orbit();
+        softwareRenderer.draw(scene, camera);
         window.renderFrame();
+
+        if (webgpuRenderer.isReady())
+            webgpuRenderer.drawWireframe(scene, camera);
+
+        camera.orbit();
     }
 
     static std::vector<Obj> makeObjects() {
@@ -46,20 +52,16 @@ struct Application {
 
 static Application* application = nullptr;
 
-static void tick() {
-    application->update();
-}
+static void tick() { application->update(); }
 
 int main() {
     application = new Application();
-
 #ifdef __EMSCRIPTEN__
     emscripten_set_main_loop(tick, 0, false);
 #else
-    while (true) {
-        tick();
-    }
+    while (true) tick();
 #endif
+    return 0;
 }
 
 // void handleEvent(const SDL_Event &event, const DrawingWindow &window, Camera &cam, Renderer &r, const Scene &scene) {

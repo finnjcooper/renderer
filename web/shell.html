@@ -18,15 +18,27 @@
             min-height: 100vh;
         }
 
+        .canvases {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 16px;
+        }
+
         canvas {
-            max-width: 100vw;
+            width: min(640px, 95vw);
             height: auto;
-            image-rendering: pixelated;
         }
     </style>
 </head>
 <body>
-    <canvas id="canvas"></canvas>
+    <div class="canvases">
+        <canvas id="canvas"></canvas>
+        <canvas id="webgpu-canvas"
+                width="1280"
+                height="720">
+        </canvas>
+    </div>
     {{{ SCRIPT }}}
 </body>
 </html>
