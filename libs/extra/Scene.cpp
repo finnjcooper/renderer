@@ -119,6 +119,8 @@ HitInfo Scene::intersection(const Ray &ray, const float minDist, const float max
 			}
 		}
 	}
+
+	return intersection;
 }
 
 

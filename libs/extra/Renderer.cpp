@@ -213,7 +213,7 @@ glm::vec3 Renderer::traceRay(const Ray &ray, const Scene &scene, int depth) {
 
 			glm::vec3 L = normalize(sample - P);
 			float dist = glm::length(sample - P);
-			const float attenuation = light.intensity / (AREA_LIGHT_SAMPLES * AREA_LIGHT_SAMPLES * (4 * M_PIf * dist * dist + 1.0f));
+			const float attenuation = light.intensity / (AREA_LIGHT_SAMPLES * AREA_LIGHT_SAMPLES * (4 * M_PI * dist * dist + 1.0f));
 			float diffuse = 0.0f, specular = 0.0f, shadeFactor = 1.0f;
 
 			switch (model.sMode) {

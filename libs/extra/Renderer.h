@@ -11,9 +11,10 @@
 #include "Camera.h"
 #include "Ray.h"
 #include <iomanip>
-#include <omp.h>
 #include <atomic>
 #include <chrono>
+#define _USE_MATH_DEFINES
+#include <cmath>
 
 #define MAX_DEPTH 4
 

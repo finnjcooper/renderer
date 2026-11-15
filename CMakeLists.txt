@@ -43,11 +43,15 @@ target_compile_options(main
     -Wno-unused-variable
     -Wno-ignored-attributes)
 
-set(DEBUG_OPTIONS -Og -fno-omit-frame-pointer -g)
-set(RELEASE_OPTIONS -O3 -march=native -mtune=native)
-set(SPEEDY_OPTIONS -Ofast -funsafe-math-optimizations -march=native -mtune=native)
-target_link_libraries(main PUBLIC $<$<CONFIG:Debug>:-Wl,-lasan>)
+set_target_properties(main PROPERTIES OUTPUT_NAME "index" SUFFIX ".html")
 
-target_compile_options(main PUBLIC "$<$<CONFIG:Release>:${RELEASE_OPTIONS}>")
-target_compile_options(main PUBLIC "$<$<CONFIG:Debug>:${DEBUG_OPTIONS}>")
-target_compile_options(main PUBLIC "$<$<CONFIG:Speedy>:${SPEEDY_OPTIONS}>")
+find_package(OpenMP)
+if(OpenMP_CXX_FOUND)
+    target_link_libraries(main PUBLIC OpenMP::OpenMP_CXX)
+endif()
+
+target_link_options(main PRIVATE
+    "-sALLOW_MEMORY_GROWTH=1"
+    "--shell-file=${CMAKE_CURRENT_SOURCE_DIR}/web/shell.html"
+    "--preload-file=${CMAKE_CURRENT_SOURCE_DIR}/assets@/assets"
+)
