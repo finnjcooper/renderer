@@ -134,6 +134,7 @@ void Scene::readObj(const Obj &obj) {
 	std::ifstream file(obj.filename);
 	// read from file
 	while(getline(file, line)) {
+		if (!line.empty() && line.back() == '\r') line.pop_back();
 		// split line into segments
 		splitLn = split(line, ' ');
 		// read from mtl file
@@ -221,6 +222,7 @@ std::unordered_map<std::string, Material> Scene::readMtl(const std::string &file
 	std::unordered_map<std::string, Material> materials;
 	// read from file
 	while(getline(file, line)) {
+		if (!line.empty() && line.back() == '\r') line.pop_back();
 		splitLn = split(line, ' ');
 		if (splitLn[0] == "newmtl") {
 			// set colour name

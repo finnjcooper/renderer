@@ -4,7 +4,7 @@
 
 Can be compiled and run with ```just```.
 ```
-just build
+just run
 ```
 
 

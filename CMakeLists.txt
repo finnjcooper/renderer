@@ -34,6 +34,7 @@ add_executable(main
 
 target_compile_options(main
     PUBLIC
+    -O3
     -Wall
     -Wextra
     -Wcast-align
@@ -51,6 +52,7 @@ if(OpenMP_CXX_FOUND)
 endif()
 
 target_link_options(main PRIVATE
+    "-O3"
     "-sALLOW_MEMORY_GROWTH=1"
     "--shell-file=${CMAKE_CURRENT_SOURCE_DIR}/web/shell.html"
     "--preload-file=${CMAKE_CURRENT_SOURCE_DIR}/assets@/assets"
