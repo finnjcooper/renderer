@@ -25,19 +25,43 @@
             gap: 16px;
         }
 
-        canvas {
+        .canvas-frame {
+            position: relative;
             width: min(640px, 95vw);
+        }
+
+        canvas {
+            display: block;
+            width: 100%;
             height: auto;
+        }
+
+        .fps-counter {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            padding: 4px 7px;
+            border-radius: 4px;
+            background: rgb(0 0 0 / 70%);
+            color: #fff;
+            font: 14px/1.2 sans-serif;
+            pointer-events: none;
         }
     </style>
 </head>
 <body>
     <div class="canvases">
-        <canvas id="canvas"></canvas>
-        <canvas id="webgpu-canvas"
-                width="1280"
-                height="720">
-        </canvas>
+        <!-- <div class="canvas-frame">
+            <canvas id="canvas"></canvas>
+            <span class="fps-counter" id="canvas-fps">FPS --</span>
+        </div> -->
+        <div class="canvas-frame">
+            <canvas id="webgpu-canvas"
+                    width="1280"
+                    height="720">
+            </canvas>
+            <span class="fps-counter" id="webgpu-canvas-fps">FPS --</span>
+        </div>
     </div>
     {{{ SCRIPT }}}
 </body>

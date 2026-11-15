@@ -4,33 +4,63 @@
 #include <emscripten/emscripten.h>
 #include <vector>
 
+#ifdef __EMSCRIPTEN__
+EM_JS(void, updateCanvasFps, (const char* canvasId), {
+    const canvas = document.getElementById(UTF8ToString(canvasId));
+    const counter = document.getElementById(`${UTF8ToString(canvasId)}-fps`);
+
+    if (!canvas || !counter) {
+        throw new Error(`Could not find canvas or FPS counter for ${UTF8ToString(canvasId)}`);
+    }
+
+    const now = performance.now();
+    const state = canvas.__fpsState || { frames: 0, last: now };
+    state.frames += 1;
+
+    const elapsed = now - state.last;
+    if (elapsed >= 500) {
+        counter.textContent = `${Math.round(state.frames * 1000 / elapsed)} FPS`;
+        state.frames = 0;
+        state.last = now;
+    }
+
+    canvas.__fpsState = state;
+});
+#else
+static void updateCanvasFps(const char*) {}
+#endif
+
 #define WIDTH 1280
 #define HEIGHT 720
 
 struct Application {
-    DrawingWindow window;
+    // DrawingWindow window;
     Camera camera;
     std::vector<Light> lights;
     Scene scene;
-    Renderer softwareRenderer;
+    // Renderer softwareRenderer;
     WebGPURenderer webgpuRenderer;
 
     Application()
-        : window(WIDTH, HEIGHT, false),
+        :
+        //  window(WIDTH, HEIGHT, false),
           camera(WIDTH, HEIGHT, 3.0f, glm::vec3(0, 0, 4)),
           lights{
               Light(CEIL0, 15.0f, CEIL1 - CEIL0, CEIL2 - CEIL0)
           },
           scene(makeObjects(), lights),
-          softwareRenderer(window),
+        //   softwareRenderer(window),
           webgpuRenderer(WIDTH, HEIGHT) {}
 
     void update() {
-        softwareRenderer.draw(scene, camera);
-        window.renderFrame();
+        // softwareRenderer.draw(scene, camera);
+        // window.renderFrame();
+        // updateCanvasFps("canvas");
 
-        if (webgpuRenderer.isReady())
-            webgpuRenderer.drawWireframe(scene, camera);
+        if (webgpuRenderer.isReady()) {
+            webgpuRenderer.drawRaytraced(scene, camera);
+            updateCanvasFps("webgpu-canvas");
+        }
 
         camera.orbit();
     }
